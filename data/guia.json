@@ -1,0 +1,82 @@
+{
+  "tiempos": [
+    { "titulo": "Aldeano", "valor": "50 comida · 25 s", "nota": "Un CU produce ~2,4 aldeanos por minuto. Nunca lo dejes quieto." },
+    { "titulo": "Telar (Loom)", "valor": "50 oro · 25 s", "nota": "Hacelo antes de atraer jabalíes o cuando te ataquen con scouts." },
+    { "titulo": "Edad Feudal", "valor": "500 comida · 130 s", "nota": "Requiere 2 edificios de la Edad Oscura (casas no cuentan; molino/campamentos/cuartel sí)." },
+    { "titulo": "Edad de los Castillos", "valor": "800 comida + 200 oro · 160 s", "nota": "Requiere 2 edificios feudales (herrería, mercado, galería, establo...)." },
+    { "titulo": "Edad Imperial", "valor": "1000 comida + 800 oro · 190 s", "nota": "Requiere 2 edificios de Castillos o un castillo." },
+    { "titulo": "Casa", "valor": "25 madera · +5 pop", "nota": "Construí una cada ~5 aldeanos; en Castillos de a 2-3." },
+    { "titulo": "Granja", "valor": "60 madera", "nota": "Usá la cola de resembrado en el molino para no tener aldeanos ociosos." },
+    { "titulo": "Centro Urbano", "valor": "275 madera + 100 piedra", "nota": "Boom típico: 2-3 CU extra al llegar a Castillos." },
+    { "titulo": "Clic a Feudal (objetivo)", "valor": "8:30 - 9:30", "nota": "Llegada a Feudal ~10:00. Si llegás después de 11:00, revisá CU ocioso y bloqueos de casas." },
+    { "titulo": "Llegada a Castillos (objetivo)", "valor": "16:00 - 18:00", "nota": "Fast Castle: ~16:00. Después de Feudal agresiva: ~19:00-21:00." },
+    { "titulo": "Aldeanos a los 15 min", "valor": "~35-40", "nota": "Con un solo CU sin parar." },
+    { "titulo": "Aldeanos a los 25 min", "valor": "~80-100", "nota": "Con boom de 3 CU. Meta habitual: 110-130 aldeanos en Imperial." },
+    { "titulo": "Reparto Imperial (orientativo)", "valor": "~45 comida / 35 madera / 30 oro / 10 piedra", "nota": "Depende mucho de qué unidades hagas." }
+  ],
+  "counters": [
+    { "unidad": "Arqueros", "la_vencen": ["Hostigadores", "Caballeros", "Mangoneles", "Huscarles"], "buena_contra": ["Infantería", "Lanceros"] },
+    { "unidad": "Caballeros / caballería pesada", "la_vencen": ["Lanceros / Piqueros", "Camellos", "Monjes (con micro)"], "buena_contra": ["Arqueros", "Asedio", "Hostigadores"] },
+    { "unidad": "Exploradores / caballería ligera", "la_vencen": ["Lanceros", "Camellos"], "buena_contra": ["Monjes", "Hostigadores", "Aldeanos", "Asedio"] },
+    { "unidad": "Lanceros / Piqueros", "la_vencen": ["Arqueros", "Espadachines", "Escorpiones"], "buena_contra": ["Caballería", "Elefantes", "Camellos"] },
+    { "unidad": "Hombres de armas / Espadachines", "la_vencen": ["Arqueros", "Mangoneles", "Cañoneros de mano"], "buena_contra": ["Lanceros", "Hostigadores", "Edificios"] },
+    { "unidad": "Hostigadores", "la_vencen": ["Infantería", "Caballería", "Mangoneles"], "buena_contra": ["Arqueros", "Arqueros a caballo", "Lanceros"] },
+    { "unidad": "Arqueros a caballo", "la_vencen": ["Hostigadores", "Escorpiones", "Caballeros"], "buena_contra": ["Infantería", "Lanceros", "Caballería lenta"] },
+    { "unidad": "Monjes", "la_vencen": ["Exploradores / caballería ligera", "Guerreros águila", "Arqueros"], "buena_contra": ["Unidades caras (caballeros, elefantes)"] },
+    { "unidad": "Mangoneles / Onagros", "la_vencen": ["Caballería", "Otros mangoneles", "Arietes"], "buena_contra": ["Arqueros agrupados", "Infantería agrupada"] },
+    { "unidad": "Arietes", "la_vencen": ["Infantería", "Caballería cuerpo a cuerpo"], "buena_contra": ["Edificios", "Castillos"] },
+    { "unidad": "Elefantes", "la_vencen": ["Monjes", "Alabarderos", "Camellos en masa"], "buena_contra": ["Casi todo cuerpo a cuerpo", "Edificios"] }
+  ],
+  "consejos": [
+    {
+      "titulo": "Economía",
+      "items": [
+        "Regla de oro: el Centro Urbano NUNCA debe estar quieto. Encolá de a 1-2 aldeanos.",
+        "Casas antes de necesitarlas: si ves 'población máxima', ya perdiste tiempo.",
+        "Ovejas y jabalí bajo el CU: el viaje más corto posible.",
+        "Doble hacha apenas llegues a Feudal; Collar de caballo cuando tengas ~8 granjas.",
+        "Carretilla (Wheelbarrow) y Arado pesado temprano en Castillos.",
+        "Campamentos pegados al recurso. Si los aldeanos caminan mucho, poné uno nuevo.",
+        "Granjas alrededor del CU y del molino; usá la cola de resembrado."
+      ]
+    },
+    {
+      "titulo": "Atajos (por defecto, configurables)",
+      "items": [
+        "H: seleccionar el Centro Urbano. Q (con CU seleccionado): crear aldeano.",
+        "Punto ( . ): ir al siguiente aldeano ocioso.",
+        "Ctrl + número: crear grupo de control; número: seleccionarlo.",
+        "Shift + clic: encolar órdenes o unidades de a 5.",
+        "Asigná atajos a cada edificio militar para producir sin mirar la base."
+      ]
+    },
+    {
+      "titulo": "Exploración",
+      "items": [
+        "Con el explorador: primero las 8 ovejas cerca del CU, después jabalíes y bayas.",
+        "Encontrá la base del rival antes de los 6-7 min para saber qué build hace.",
+        "Mirá sus edificios: establo = scouts, galería = arqueros, muchos campamentos = boom.",
+        "Explorá recursos extra (oro, piedra) para la expansión en Castillos."
+      ]
+    },
+    {
+      "titulo": "Guerra temprana",
+      "items": [
+        "Contra scouts: lanceros en Feudal y aldeanos cerca del CU. Telar ayuda mucho.",
+        "Contra arqueros: hostigadores (sin oro) y muros/torres en el bosque.",
+        "Contra torres en tus recursos (tower rush): llevá aldeanos a construir contra-torres o mudá los aldeanos a otro recurso.",
+        "Usá muros de palos (palisade) en mapas abiertos para ganar tiempo.",
+        "Si te atacan, la Campana del CU guarda a los aldeanos (asignale un atajo)."
+      ]
+    },
+    {
+      "titulo": "Mentalidad y práctica",
+      "items": [
+        "Practicá una sola build contra la IA hasta que te salga sin mirar.",
+        "Mirá tus replays: buscá el tiempo de CU ocioso y bloqueos de casas.",
+        "Mejor una economía constante que una micro perfecta.",
+        "No hay que ganar todas las peleas: con más aldeanos, el tiempo juega a tu favor."
+      ]
+    }
+  ]
+}

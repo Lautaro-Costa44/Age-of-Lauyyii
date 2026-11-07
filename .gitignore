@@ -1,0 +1,12 @@
+# Compilación de Rust
+/target/
+
+# Preferencias locales de la app
+config.json
+
+# Python
+__pycache__/
+
+# Datos descargados del techtree (se usan solo para regenerar data/civs.json)
+/data.json
+/strings_es.json
