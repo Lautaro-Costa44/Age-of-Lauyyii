@@ -20,7 +20,8 @@ fn main() -> eframe::Result {
         viewport: egui::ViewportBuilder::default()
             .with_title("Age of Lauyyii")
             .with_inner_size(TAMANO_NORMAL)
-            .with_min_inner_size([420.0, 200.0]),
+            .with_min_inner_size([420.0, 200.0])
+            .with_icon(std::sync::Arc::new(icono_ventana())),
         vsync: true,
         ..Default::default()
     };
@@ -75,6 +76,21 @@ struct App {
     paso: usize,
     compacto: bool,
     crono: Cronometro,
+    logo: egui::TextureHandle,
+}
+
+/// Decodifica un PNG embebido a RGBA.
+fn decodificar_png(bytes: &[u8]) -> (Vec<u8>, u32, u32) {
+    let img = image::load_from_memory_with_format(bytes, image::ImageFormat::Png)
+        .expect("imagen embebida inválida")
+        .to_rgba8();
+    let (w, h) = img.dimensions();
+    (img.into_raw(), w, h)
+}
+
+fn icono_ventana() -> egui::IconData {
+    let (rgba, width, height) = decodificar_png(include_bytes!("../assets/icono.png"));
+    egui::IconData { rgba, width, height }
 }
 
 impl App {
@@ -102,6 +118,11 @@ impl App {
             paso: 0,
             compacto: false,
             crono: Cronometro::default(),
+            logo: {
+                let (rgba, w, h) = decodificar_png(include_bytes!("../assets/logo.png"));
+                let img = egui::ColorImage::from_rgba_unmultiplied([w as usize, h as usize], &rgba);
+                cc.egui_ctx.load_texture("logo", img, egui::TextureOptions::LINEAR)
+            },
         };
         app.registrar_atajos();
         app
@@ -182,7 +203,10 @@ impl App {
             .frame(egui::Frame::new().fill(tema::FONDO).inner_margin(egui::Margin::symmetric(14, 8)))
             .show(ctx, |ui| {
                 ui.horizontal(|ui| {
-                    ui.label(RichText::new("AGE OF LAUYYII").color(tema::DORADO).strong().size(17.0));
+                    let alto_logo = if self.compacto { 34.0 } else { 66.0 };
+                    let tam = self.logo.size_vec2() * (alto_logo / self.logo.size_vec2().y);
+                    ui.add(egui::Image::from_texture(egui::load::SizedTexture::new(self.logo.id(), tam)))
+                        .on_hover_text("Age of Lauyyii");
                     ui.add_space(12.0);
                     if !self.compacto {
                         for (t, nombre) in [
