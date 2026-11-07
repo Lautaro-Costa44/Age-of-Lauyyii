@@ -3,7 +3,11 @@
 
 use crate::data::{Linea, Paso};
 use crate::tema;
-use eframe::egui::{self, pos2, vec2, Align2, Color32, CornerRadius, FontId, Rect, Sense, Stroke, StrokeKind};
+use eframe::egui::{
+    self, pos2, text::LayoutJob, vec2, Align2, Color32, CornerRadius, FontId, Galley, Rect, RichText, Sense, Stroke,
+    StrokeKind,
+};
+use std::sync::Arc;
 
 pub fn dibujar(ui: &mut egui::Ui, linea: &Linea, paso: &mut usize, compacto: bool) {
     let n = linea.pasos.len();
@@ -96,7 +100,8 @@ fn tarjeta(
     let pad = 14.0 * escala;
     let interior = r.shrink(pad);
     let p2 = painter.with_clip_rect(r.shrink(2.0));
-    let base = if compacto { 13.5 } else { 16.0 };
+    // Tamaño máximo del texto; `ajustar` lo baja hasta que entre.
+    let base = if compacto { 21.0 } else { 26.0 };
     // El texto se achica menos que la tarjeta para que las laterales sigan legibles.
     let escala = 0.55 + 0.45 * escala;
     let f = |tam: f32| FontId::proportional(tam * escala);
@@ -145,13 +150,11 @@ fn tarjeta(
         y += alto_num + 4.0 * escala;
     }
 
-    // Texto del paso
-    let reservado_abajo = if p.recursos().iter().any(|&x| x > 0) { 30.0 * escala } else { 0.0 };
-    let g = ui
-        .painter()
-        .layout(p.texto.clone(), f(base), a(tema::TEXTO), interior.width());
-    let max_y = interior.bottom() - reservado_abajo;
-    let texto_rect = Rect::from_min_max(pos2(interior.left(), y), pos2(interior.right(), max_y));
+    // Texto del paso: la letra más grande que entre en el espacio libre.
+    let reservado_abajo = if p.recursos().iter().any(|&x| x > 0) { 34.0 * escala } else { 4.0 };
+    let alto_libre = (interior.bottom() - reservado_abajo - y).max(10.0);
+    let g = ajustar(ui, &p.texto, interior.width(), alto_libre, base * escala, 10.0, a(tema::TEXTO));
+    let texto_rect = Rect::from_min_max(pos2(interior.left(), y), pos2(interior.right(), y + alto_libre));
     painter.with_clip_rect(texto_rect).galley(pos2(interior.left(), y), g, a(tema::TEXTO));
 
     // Barra de recursos
@@ -175,21 +178,53 @@ fn tarjeta(
             );
             x += w;
         }
-        let mut x = interior.left();
-        for (k, &cant) in rec.iter().enumerate() {
-            if cant == 0 {
-                continue;
+        // Etiquetas: si no entran a lo ancho, se achica la letra.
+        let etiquetas: Vec<(Color32, String)> = rec
+            .iter()
+            .enumerate()
+            .filter(|(_, &c)| c > 0)
+            .map(|(k, &c)| (tema::RECURSOS[k].0, format!("{} {c}", tema::RECURSOS[k].1)))
+            .collect();
+        let mut tam = 13.0 * escala;
+        let galleys = loop {
+            let gs: Vec<_> = etiquetas
+                .iter()
+                .map(|(c, t)| ui.painter().layout_no_wrap(t.clone(), FontId::proportional(tam), a(*c)))
+                .collect();
+            let ancho: f32 = gs.iter().map(|g| g.size().x).sum::<f32>() + 10.0 * (gs.len() as f32 - 1.0);
+            if ancho <= interior.width() || tam <= 8.0 {
+                break gs;
             }
-            let (color, nombre) = tema::RECURSOS[k];
-            let r = p2.text(
-                pos2(x, barra.bottom() + 4.0 * escala),
-                Align2::LEFT_TOP,
-                format!("{nombre} {cant}"),
-                f(11.5),
-                a(color),
-            );
-            x = r.right() + 12.0 * escala;
+            tam -= 0.5;
+        };
+        let mut x = interior.left();
+        for g in galleys {
+            let w = g.size().x;
+            p2.galley(pos2(x, barra.bottom() + 4.0 * escala), g, tema::TEXTO);
+            x += w + 10.0;
         }
+    }
+}
+
+/// Arma el texto con la letra más grande posible (entre `max` y `min`) que
+/// entre en `ancho` x `alto`. Si ni con la mínima entra, corta con "…":
+/// nunca se sale de la tarjeta.
+fn ajustar(ui: &egui::Ui, texto: &str, ancho: f32, alto: f32, max: f32, min: f32, color: Color32) -> Arc<Galley> {
+    let mut tam = max.max(min);
+    loop {
+        let fuente = FontId::proportional(tam);
+        let mut job = LayoutJob::simple(texto.to_owned(), fuente.clone(), color, ancho);
+        let ultimo = tam <= min;
+        if ultimo {
+            let fila = ui.fonts(|f| f.row_height(&fuente));
+            job.wrap.max_rows = ((alto / fila).floor() as usize).max(1);
+            job.wrap.overflow_character = Some('…');
+        }
+        let g = ui.fonts(|f| f.layout_job(job));
+        if g.size().y <= alto || ultimo {
+            return g;
+        }
+        tam = (tam - 1.0).max(min);
     }
 }
 
@@ -234,4 +269,31 @@ fn recorte(s: &str, max: usize) -> String {
     } else {
         format!("{}…", s.chars().take(max).collect::<String>())
     }
+}
+
+/// Fichas "qué investigar / entrenar · dónde" del paso actual.
+pub fn mejoras(ui: &mut egui::Ui, p: &Paso, compacto: bool) {
+    if p.mejoras.is_empty() {
+        return;
+    }
+    ui.horizontal_wrapped(|ui| {
+        if !compacto {
+            ui.label(RichText::new("Hacé ahora:").color(tema::TEXTO_SUAVE));
+        }
+        for m in &p.mejoras {
+            egui::Frame::new()
+                .fill(tema::TARJETA)
+                .stroke(Stroke::new(1.0_f32, tema::DORADO.gamma_multiply(0.45)))
+                .corner_radius(CornerRadius::same(12))
+                .inner_margin(egui::Margin::symmetric(10, 3))
+                .show(ui, |ui| {
+                    ui.horizontal(|ui| {
+                        ui.spacing_mut().item_spacing.x = 5.0;
+                        let tam = if compacto { 13.0 } else { 15.0 };
+                        ui.label(RichText::new(&m.que).strong().size(tam).color(tema::TEXTO));
+                        ui.label(RichText::new(&m.donde).size(tam - 2.0).color(tema::DORADO));
+                    });
+                });
+        }
+    });
 }

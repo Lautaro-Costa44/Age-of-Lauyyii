@@ -29,6 +29,8 @@ pub struct Civ {
     pub imperial: String,
     #[serde(default)]
     pub lineas: Vec<Linea>,
+    #[serde(default)]
+    pub unidades_detalle: Vec<UnidadUnica>,
 }
 
 #[derive(Deserialize, Clone)]
@@ -61,6 +63,30 @@ pub struct Paso {
     /// Avance o llegada de edad
     #[serde(default)]
     pub hito: bool,
+    /// Qué investigar o entrenar en este paso y dónde
+    #[serde(default)]
+    pub mejoras: Vec<Mejora>,
+}
+
+#[derive(Deserialize, Clone)]
+pub struct Mejora {
+    pub que: String,
+    pub donde: String,
+}
+
+#[derive(Deserialize, Clone)]
+pub struct UnidadUnica {
+    pub nombre: String,
+    /// Clase según el techtree (ej. "caballería", "arquero a pie")
+    #[serde(default)]
+    pub clase: String,
+    /// Tipo genérico con el que se la puede comparar
+    pub como: String,
+    pub debil: Vec<String>,
+    pub fuerte: Vec<String>,
+    /// true si el counter está ajustado a mano para esta unidad
+    #[serde(default)]
+    pub ajustado: bool,
 }
 
 fn fase_por_defecto() -> String {

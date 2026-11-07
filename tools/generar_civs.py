@@ -30,7 +30,7 @@ PLAN = {
     "Armenians": dict(dif="Media", ap="maa", alt="fc",
         cas="Construí una iglesia fortificada (la primera trae una reliquia gratis). Espadachines + arqueros con arco compuesto.",
         imp="Relicarios para la infantería. Campeones + arqueros con arco compuesto, sacerdotes guerreros para curar.",
-        notas=dict(feudal="Bono armenio: Espadachín de espada larga y Piquero ya se investigan en Feudal.")),
+        notas=dict(feudal="Bono armenio: Soldado con espada larga y Piquero ya se investigan en Feudal.")),
     "Aztecs": dict(dif="Media", ap="maa", alt="arqueros",
         cas="Monjes + guerreros águila. Atlatl para los guerrilleros. Juntá reliquias (bono de equipo: +33 % de oro).",
         imp="Guerras florales (+4 de ataque a la infantería): jaguares o campeones + águilas de élite.",
@@ -60,7 +60,7 @@ PLAN = {
     "Burgundians": dict(dif="Media", ap="fc", alt="scouts",
         cas="Caballeros temprano (la mejora a caballeros está disponible en Castillos). Viñedos de Borgoña para sumar oro.",
         imp="Caballeros + costilleros. La pólvora tiene +25 % de ataque.",
-        notas=dict(madera="Doble hacha ya está disponible en la Edad Oscura y cuesta 40 % menos de comida.")),
+        notas=dict(madera="Hacha de doble filo ya está disponible en la Edad Oscura y cuesta 40 % menos de comida.")),
     "Burmese": dict(dif="Media", ap="maa", alt="fc",
         cas="Arambais o elefantes de combate. Monasterio barato (50 % menos).",
         imp="Howdah. Elefantes de combate de élite + arambais.",
@@ -380,14 +380,14 @@ def apertura(nombre, l, plan):
     if nombre == "scouts":
         l.paso(21, "Aldeanos 18-21 a madera (2do campamento si el bosque queda lejos).", (13, 8, 0, 0))
         l.avanzar("Feudal", f"POP 22: clic en Feudal ({subida(l, 'cuartel durante el avance')}). Pasá 2 de ovejas a madera para las granjas.", (11, 10, 0, 0))
-        l.paso(l.v, "LLEGADA A FEUDAL: 2 establos (o establo + herrería). Exploradores sin parar. Doble hacha y Collar de caballo." + l.nota("feudal"), (11, 10, 0, 0), hito=True)
-        l.paso(l.v + 6, "Aldeanos nuevos a granjas y madera; algo de oro para Linaje o la herrería." + l.nota("granjas"), (15, 10, 2, 0))
+        l.paso(l.v, "LLEGADA A FEUDAL: 2 establos (o establo + herrería). Exploradores sin parar. Hacha de doble filo y Collera." + l.nota("feudal"), (11, 10, 0, 0), hito=True)
+        l.paso(l.v + 6, "Aldeanos nuevos a granjas y madera; algo de oro para la herrería." + l.nota("granjas"), (15, 10, 2, 0))
         fin(l, plan, (17, 12, 5, 0), l.v + 4)
     elif nombre == "arqueros":
         l.paso(20, "Aldeanos 18-20 a madera.", (13, 7, 0, 0))
         l.paso(22, "Aldeanos 21-22 a oro con campamento minero." + l.nota("oro"), (13, 7, 2, 0))
         l.avanzar("Feudal", f"POP 23: clic en Feudal ({subida(l, 'cuartel durante el avance')}). Pasá 2 de comida a madera.", (11, 9, 2, 0))
-        l.paso(l.v, "LLEGADA A FEUDAL: 2 galerías de tiro con arco, arqueros sin parar. Emplumado y Doble hacha." + l.nota("feudal"), (11, 9, 2, 0), hito=True)
+        l.paso(l.v, "LLEGADA A FEUDAL: 2 galerías de tiro con arco, arqueros sin parar. Emplumado de flechas y Hacha de doble filo." + l.nota("feudal"), (11, 9, 2, 0), hito=True)
         l.paso(l.v + 8, "Aldeanos nuevos: oro hasta 8-10, el resto a madera y granjas. Hostigadores si el rival también va a arqueros." + l.nota("granjas"), (12, 10, 8, 0))
         fin(l, plan, (14, 11, 9, 0), l.v + 4)
     elif nombre == "maa":
@@ -395,14 +395,14 @@ def apertura(nombre, l, plan):
         l.paso(21, "Aldeanos 20-21 a oro. Entrená 3 milicias apenas tengas el oro.", (13, 6, 2, 0))
         l.avanzar("Feudal", f"Clic en Feudal ({subida(l, 'cuartel + molino ya cuentan')}). Pasá 2 de comida a madera.", (11, 8, 2, 0))
         l.paso(l.v, "LLEGADA A FEUDAL: investigá Hombres de armas y atacá. Construí 1-2 galerías y pasá a arqueros." + l.nota("feudal"), (11, 8, 2, 0), hito=True)
-        l.paso(l.v + 7, "Aldeanos nuevos: oro hasta ~6, granjas y madera. Doble hacha." + l.nota("granjas"), (13, 9, 6, 0))
+        l.paso(l.v + 7, "Aldeanos nuevos: oro hasta ~6, granjas y madera. Hacha de doble filo." + l.nota("granjas"), (13, 9, 6, 0))
         fin(l, plan, (15, 10, 7, 0), l.v + 4)
     elif nombre == "fc":
         l.paso(21, "Aldeanos 18-21 a madera.", (13, 8, 0, 0))
         l.paso(23, "Aldeanos 22-23 a comida (ovejas que queden o primeras granjas)." + l.nota("granjas"), (15, 8, 0, 0))
         l.paso(26, "Aldeanos 24-26 a oro." + l.nota("oro"), (15, 8, 3, 0))
         l.avanzar("Feudal", f"POP 27: clic en Feudal ({subida(l, 'herrería o mercado durante el avance')}). 2 aldeanos más a oro.", (14, 7, 5, 0))
-        l.paso(l.v, "LLEGADA A FEUDAL: 2do edificio feudal (mercado/herrería). Doble hacha." + l.nota("feudal"), (14, 7, 5, 0), hito=True)
+        l.paso(l.v, "LLEGADA A FEUDAL: 2do edificio feudal (mercado/herrería). Hacha de doble filo." + l.nota("feudal"), (14, 7, 5, 0), hito=True)
         fin(l, plan, (14, 8, 6, 0), l.v + 2)
     return l.pasos
 
@@ -424,13 +424,16 @@ def parsear(help_text):
     for ln in lineas[1:]:
         cab = ln.lstrip("• ").strip()
         low = cab.lower()
-        if low.startswith("unidad"):
+        es_titulo = low.rstrip().endswith(":")
+        if not es_titulo:
+            pass
+        elif low.startswith("unidad"):
             sec = "unidades"
             continue
-        if low.startswith("tecnolog") or low.startswith("técnicas"):
+        elif low.startswith("tecnolog") or low.startswith("técnicas"):
             sec = "techs"
             continue
-        if low.startswith("bonificación"):
+        elif low.startswith("bonificación"):
             sec = "equipo"
             continue
         destino = {"bonos": bonos, "unidades": unidades, "techs": techs, "equipo": equipo}[sec]
@@ -454,9 +457,234 @@ def parsear(help_text):
     return enfoque, [re.sub(r"\s+", " ", b) for b in bonos], uu, tt, " ".join(equipo)
 
 
+# ---------------------------------------------------------------------------
+# Mejoras por paso: "qué investigar/entrenar" + "dónde". Los nombres son los
+# oficiales en español (del techtree) y se filtran según lo que tenga la civ.
+# Cada casillero es una lista de alternativas: se usa la primera disponible.
+# ---------------------------------------------------------------------------
+
+def U(que, donde, interno):
+    return ("Unit", que, donde, interno)
+
+
+def T(que, donde, interno):
+    return ("Tech", que, donde, interno)
+
+
+def B(que, donde):
+    return (None, que, donde, None)
+
+
+ALDEANOS = B("Aldeanos sin parar", "Centro urbano")
+CAMP_MAD = B("Campamento maderero", "construir en el bosque")
+CAMP_MIN = B("Campamento minero", "construir en el oro")
+MOLINO = B("Molino", "construir en las bayas")
+TELAR = T("Telar", "Centro urbano", "Loom")
+HACHA = T("Hacha de doble filo", "Campamento maderero", "Double Bit Axe")
+COLLERA = T("Collera", "Molino", "Horse collar")
+CARRETILLA = T("Carretilla", "Centro urbano", "Wheel Barrow")
+ARADO = T("Arado pesado", "Molino", "Heavy plow")
+SIERRA = T("Sierra de arco", "Campamento maderero", "Bow Saw")
+MINERIA = T("Minería aurífera", "Campamento minero", "Gold Mining")
+EMPLUMADO = T("Emplumado de flechas", "Herrería", "Fletching")
+PUNZON = T("Flecha de punzón", "Herrería", "Bodkin Arrow")
+FORJA = T("Forja", "Herrería", "Forging")
+ALTO_HORNO = T("Alto horno", "Herrería", "Blast Furnace")
+EDAD_F = B("Edad Feudal", "Centro urbano")
+EDAD_C = B("Edad de los Castillos", "Centro urbano")
+GRANJAS = B("Granjas", "alrededor del molino y el CU")
+CUARTEL = B("Cuarteles", "construir durante el avance")
+EDIF_FEUDAL = B("Herrería o Mercado", "edificio feudal")
+CU_EXTRA = B("2-3 Centros urbanos", "275 madera + 100 piedra c/u")
+EXPLORADOR = [U("Caballería de exploración", "Establo", "SCOUT"),
+              U("Explorador a camello", "Establo", "CAMELSC"),
+              U("Explorador águila", "Cuarteles", "EAGLE")]
+ARQUERO = U("Arquero", "Galería de tiro con arco", "ARCHR")
+HOSTIGADOR = U("Hostigador", "Galería de tiro con arco", "XBOWM")
+LANCERO = U("Lancero", "Cuarteles", "PKEMN")
+MILICIA = U("Milicia", "Cuarteles", "SPRMN")
+HOMBRE_ARMAS = U("Hombre de armas", "Cuarteles", "SWDMN")
+CABALLERO = [U("Caballero", "Establo", "KNGHT"), U("Explorador águila", "Cuarteles", "EAGLE")]
+BALLESTERO = U("Ballestero", "Galería de tiro con arco", "CARCH")
+ESPADA_LARGA = U("Soldado con espada larga", "Cuarteles", "THSWD")
+PIQUERO = U("Piquero", "Cuarteles", "ISPKM")
+PALADIN = [U("Paladín", "Establo", "PALDN"), U("Caballero", "Establo", "KNGHT"),
+           U("Explorador águila", "Cuarteles", "EAGLE")]
+ALABARDERO = U("Alabardero", "Cuarteles", "HLBDM")
+ARBALESTERO = U("Arbalestero", "Galería de tiro con arco", "ACOAR")
+HOST_ELITE = U("Hostigador de élite", "Galería de tiro con arco", "HXBOW")
+CAMPEON = U("Campeón", "Cuarteles", "HEROI")
+
+# Marcadores que se reemplazan por lo propio de cada civ
+UU, UT1, UT2 = "UU", "UT1", "UT2"
+
+OSCURA = [[ALDEANOS], [CAMP_MAD], [TELAR], [MOLINO], []]
+MEJORAS = {
+    "scouts": OSCURA + [
+        [], [EDAD_F, CUARTEL], [EXPLORADOR, FORJA, HACHA, COLLERA], [GRANJAS, LANCERO, CARRETILLA],
+        [EDAD_C], [CABALLERO, PIQUERO, UU, UT1, ARADO, SIERRA], [PALADIN, ALABARDERO, UT2, ALTO_HORNO]],
+    "arqueros": OSCURA + [
+        [], [CAMP_MIN], [EDAD_F, CUARTEL], [ARQUERO, EMPLUMADO, HACHA], [HOSTIGADOR, MINERIA, COLLERA],
+        [EDAD_C], [BALLESTERO, PUNZON, UU, UT1, ARADO], [ARBALESTERO, HOST_ELITE, UT2]],
+    "maa": OSCURA + [
+        [B("Cuarteles", "construir con un leñador")], [CAMP_MIN, MILICIA], [EDAD_F],
+        [HOMBRE_ARMAS, ARQUERO, EMPLUMADO], [HACHA, COLLERA, MINERIA],
+        [EDAD_C], [ESPADA_LARGA, BALLESTERO, UU, UT1, ARADO], [CAMPEON, ARBALESTERO, UT2]],
+    "fc": OSCURA + [
+        [], [GRANJAS], [CAMP_MIN], [EDAD_F, EDIF_FEUDAL], [EDIF_FEUDAL, HACHA],
+        [EDAD_C, COLLERA], [CU_EXTRA, CABALLERO, UU, UT1, ARADO, CARRETILLA], [PALADIN, ARBALESTERO, UT2]],
+}
+
+
+def sin_parentesis(s):
+    return re.sub(r"\s*\(.*$", "", s).strip()
+
+
+def resolver_mejoras(apertura_id, pasos, civ_data, ids, uu, tt):
+    filas = MEJORAS[apertura_id]
+    assert len(filas) == len(pasos), (apertura_id, len(filas), len(pasos))
+
+    def disponible(item):
+        cat, _, _, interno = item
+        if cat is None:
+            return True
+        i = ids[cat].get(interno)
+        return i is not None and int(i) in civ_data[cat]
+
+    for paso, fila in zip(pasos, filas):
+        mej = []
+        for casillero in fila:
+            if casillero == UU:
+                if uu:
+                    mej.append(dict(que=sin_parentesis(uu[0]), donde="Castillo"))
+                continue
+            if casillero in (UT1, UT2):
+                k = 0 if casillero == UT1 else 1
+                if len(tt) > k:
+                    mej.append(dict(que=re.sub(r"\s*\((Castillos|Imperial)\).*$", "", tt[k]), donde="Castillo"))
+                continue
+            opciones = casillero if isinstance(casillero, list) else [casillero]
+            for op in opciones:
+                if disponible(op):
+                    mej.append(dict(que=op[1], donde=op[2]))
+                    break
+        paso["mejoras"] = mej
+
+
+# ---------------------------------------------------------------------------
+# Counters de unidades únicas: tipo según el techtree + comportamiento base
+# (con ajustes para las unidades únicas conocidas).
+# ---------------------------------------------------------------------------
+
+TIPOS = {
+    "infantería": ("Infantería", ["Arqueros", "Mangoneles/Onagros", "Artilleros manuales"],
+                   ["Lanceros/Piqueros", "Hostigadores", "Edificios"]),
+    "caballería": ("Caballería pesada", ["Lanceros/Piqueros", "Camellos", "Monjes"],
+                   ["Arqueros", "Hostigadores", "Asedio"]),
+    "arquero": ("Arqueros a pie", ["Hostigadores", "Caballeros", "Mangoneles"],
+                ["Infantería", "Lanceros"]),
+    "arquero montado": ("Arqueros a caballo", ["Hostigadores", "Camellos", "Caballería pesada"],
+                        ["Infantería", "Lanceros", "Unidades lentas"]),
+    "guerrillero": ("Hostigadores", ["Infantería", "Caballería"],
+                    ["Arqueros", "Arqueros a caballo"]),
+    "asedio": ("Asedio", ["Caballería", "Infantería cuerpo a cuerpo"],
+               ["Edificios", "Unidades agrupadas"]),
+    "pólvora": ("Unidades de pólvora", ["Mangoneles/Onagros", "Hostigadores de élite", "Caballería ligera"],
+                ["Infantería", "Lanceros", "Caballería pesada"]),
+    "barco": ("Barco de guerra (agua)", ["Brulotes", "Galeones con catapulta", "Barcos de demolición"],
+              ["Galeras", "Barcos pesqueros", "Edificios costeros"]),
+    "monje": ("Monjes", ["Caballería ligera", "Exploradores", "Explorador águila"],
+              ["Unidades caras (caballeros, elefantes)"]),
+    "héroe": ("Héroe (unidad única de campaña de los Tres Reinos)", ["Monjes", "Unidades de counter de su tipo"],
+              ["Unidades comunes"]),
+    "camello": ("Camellos", ["Lanceros/Piqueros", "Infantería", "Arqueros"],
+                ["Caballería", "Caballeros"]),
+    "elefante": ("Elefantes", ["Monjes", "Alabarderos", "Camellos en masa"],
+                 ["Unidades cuerpo a cuerpo", "Edificios"]),
+}
+
+# Ajustes conocidos: nombre (en minúsculas, comienzo) -> (tipo, débil contra, fuerte contra)
+AJUSTES = {
+    "huscarle": ("infantería", ["Caballería", "Campeones", "Artilleros manuales"], ["Arqueros", "Edificios", "Hostigadores"]),
+    "kamayuk": ("infantería", ["Arqueros", "Infantería pesada"], ["Caballería", "Elefantes", "Camellos"]),
+    "mameluco": ("camello", ["Arqueros", "Infantería", "Hostigadores"], ["Caballería", "Elefantes"]),
+    "guerrero jaguar": ("infantería", ["Arqueros", "Caballería"], ["Infantería"]),
+    "samurái": ("infantería", ["Arqueros", "Caballería"], ["Unidades únicas", "Infantería"]),
+    "caballero de la orden": ("infantería", ["Arqueros", "Mangoneles", "Artilleros manuales"], ["Unidades cuerpo a cuerpo"]),
+    "catafracta": ("caballería", ["Arqueros", "Monjes", "Camellos"], ["Infantería", "Lanceros/Piqueros"]),
+    "leitis": ("caballería", ["Lanceros/Piqueros", "Camellos", "Monjes"], ["Unidades blindadas (caballeros, infantería pesada)"]),
+    "tarcano": ("caballería", ["Lanceros/Piqueros", "Camellos"], ["Edificios", "Arqueros"]),
+    "ballestero genovés": ("arquero", ["Hostigadores", "Infantería", "Mangoneles"], ["Caballería"]),
+    "mangudai": ("arquero montado", ["Hostigadores", "Camellos"], ["Asedio", "Infantería"]),
+    "ghulam": ("infantería", ["Caballería", "Infantería pesada"], ["Arqueros", "Lanceros"]),
+    "jinete celta": ("infantería", ["Arqueros", "Caballería"], ["Arqueros", "Asedio"]),
+    "lanzador de hachas": ("infantería", ["Caballería", "Arqueros"], ["Infantería"]),
+    "arquero en camello": ("arquero montado", ["Hostigadores", "Infantería"], ["Arqueros a caballo", "Caballería"]),
+    "guardiana gbeto": ("infantería", ["Arqueros", "Caballería ligera"], ["Infantería"]),
+    "jinete de shrivamsha": ("caballería", ["Lanceros/Piqueros", "Infantería"], ["Arqueros", "Arqueros a caballo"]),
+    "arambai": ("arquero montado", ["Hostigadores", "Caballería"], ["Unidades agrupadas", "Infantería"]),
+    "elefante con balista": ("elefante", ["Monjes", "Caballería ligera", "Mangoneles"], ["Infantería agrupada", "Arqueros"]),
+    "recluta con karambit": ("infantería", ["Arqueros", "Mangoneles"], ["Infantería en masa"]),
+    "carreta de guerra husita": ("asedio", ["Infantería cuerpo a cuerpo", "Caballería"], ["Arqueros", "Unidades a distancia"]),
+    "conquistador": ("pólvora", ["Hostigadores", "Lanceros/Piqueros", "Camellos"], ["Infantería", "Arqueros"]),
+    "jenízaro": ("pólvora", ["Mangoneles/Onagros", "Hostigadores de élite"], ["Infantería", "Caballería pesada"]),
+    "chu ko nu": ("arquero", ["Hostigadores", "Mangoneles", "Caballería"], ["Infantería", "Unidades poco blindadas"]),
+    "arquero con arco largo": ("arquero", ["Hostigadores", "Caballería", "Mangoneles"], ["Infantería", "Lanceros"]),
+    "arquero emplumado": ("arquero", ["Hostigadores", "Mangoneles", "Caballería"], ["Infantería", "Lanceros"]),
+    "elefante de guerra": ("elefante", ["Monjes", "Alabarderos", "Camellos"], ["Cuerpo a cuerpo", "Edificios"]),
+    "misionero": ("monje", ["Caballería ligera", "Arqueros"], ["Unidades caras"]),
+}
+
+
+def clasificar(desc):
+    d = desc.lower()
+    if "héroe" in d:
+        return "héroe"
+    if "monje" in d:
+        return "monje"
+    if "barco" in d:
+        return "barco"
+    if "asedio" in d:
+        return "asedio"
+    if "pólvora" in d or "artillero" in d:
+        return "pólvora"
+    if "guerrillero" in d:
+        return "guerrillero"
+    if "arquero montado" in d or "arquero a caballo" in d or "a distancia" in d:
+        return "arquero montado"
+    if "arquero" in d:
+        return "arquero"
+    if "caballería" in d:
+        return "caballería"
+    return "infantería"
+
+
+def detalle_unidades(uu):
+    salida = []
+    for u in uu:
+        nombre = sin_parentesis(u)
+        m = re.search(r"\((.*)\)", u)
+        desc = m.group(1) if m else ""
+        low = nombre.lower()
+        tipo = clasificar(desc)
+        if "camello" in low:
+            tipo = "camello"
+        if "elefante" in low:
+            tipo = "elefante"
+        debil, fuerte = TIPOS[tipo][1], TIPOS[tipo][2]
+        for clave, (t, d, f) in AJUSTES.items():
+            if low.startswith(clave):
+                tipo, debil, fuerte = t, d, f
+                break
+        salida.append(dict(nombre=nombre, clase=desc, como=TIPOS[tipo][0], debil=debil, fuerte=fuerte,
+                           ajustado=any(low.startswith(k) for k in AJUSTES)))
+    return salida
+
+
 def main(data_path, strings_path, salida):
     data = json.load(open(data_path, encoding="utf-8"))
     strings = json.load(open(strings_path, encoding="utf-8"))
+    ids = {cat: {t["internal_name"]: k for k, t in data["data"][cat].items()} for cat in ("Unit", "Tech")}
     civs = []
     for clave, c in data["civs"].items():
         plan = PLAN.get(clave)
@@ -469,9 +697,11 @@ def main(data_path, strings_path, salida):
         for ap in (plan["ap"], plan["alt"]):
             n, tipo, desc = NOMBRES_APERTURA[ap]
             pasos = apertura(ap, Linea(clave, plan), plan)
+            resolver_mejoras(ap, pasos, c, ids, uu, tt)
             lineas.append(dict(id=ap, nombre=n, tipo=tipo, descripcion=desc, pasos=pasos))
         civs.append(dict(nombre=nombre, clave=clave, enfoque=enfoque, dificultad=plan["dif"],
                          unidades_unicas=uu, tecnologias_unicas=tt, bonos=bonos,
+                         unidades_detalle=detalle_unidades(uu),
                          bono_equipo=equipo, castillos=plan["cas"], imperial=plan["imp"],
                          lineas=lineas))
     civs.sort(key=lambda x: x["nombre"])

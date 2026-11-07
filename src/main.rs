@@ -13,7 +13,7 @@ use eframe::egui::{self, RichText};
 use std::time::{Duration, Instant};
 
 const TAMANO_NORMAL: [f32; 2] = [1060.0, 720.0];
-const TAMANO_COMPACTO: [f32; 2] = [700.0, 320.0];
+const TAMANO_COMPACTO: [f32; 2] = [720.0, 370.0];
 
 fn main() -> eframe::Result {
     let opciones = eframe::NativeOptions {
@@ -73,6 +73,7 @@ struct App {
     tab: Tab,
     civ_sel: usize,
     filtro: String,
+    filtro_counters: String,
     paso: usize,
     compacto: bool,
     crono: Cronometro,
@@ -115,6 +116,7 @@ impl App {
             tab: Tab::Partida,
             civ_sel,
             filtro: String::new(),
+            filtro_counters: String::new(),
             paso: 0,
             compacto: false,
             crono: Cronometro::default(),
@@ -446,6 +448,10 @@ impl App {
                 carrusel::puntos(ui, l, &mut self.paso);
                 ui.add_space(6.0);
                 self.navegacion(ui);
+                if let Some(p) = l.pasos.get(self.paso) {
+                    ui.add_space(4.0);
+                    carrusel::mejoras(ui, p, false);
+                }
             }
             ui.add_space(12.0);
             ui.columns(2, |cols| {
@@ -491,6 +497,9 @@ impl App {
         if let Some(l) = civ.lineas.get(self.cfg.linea) {
             carrusel::dibujar(ui, l, &mut self.paso, true);
             carrusel::puntos(ui, l, &mut self.paso);
+            if let Some(p) = l.pasos.get(self.paso) {
+                carrusel::mejoras(ui, p, true);
+            }
         }
     }
 
@@ -563,22 +572,58 @@ impl App {
         });
     }
 
-    fn vista_counters(&self, ui: &mut egui::Ui) {
+    fn vista_counters(&mut self, ui: &mut egui::Ui) {
+        ui.horizontal(|ui| {
+            ui.add(
+                egui::TextEdit::singleline(&mut self.filtro_counters)
+                    .hint_text("Buscar unidad o civilización… (ej: camello, Sarracenos)")
+                    .desired_width(420.0),
+            );
+            if !self.filtro_counters.is_empty() && ui.button("Limpiar").clicked() {
+                self.filtro_counters.clear();
+            }
+        });
+        ui.add_space(6.0);
+        let filtro = self.filtro_counters.to_lowercase();
+        let ok = |textos: &[&str]| filtro.is_empty() || textos.iter().any(|t| t.to_lowercase().contains(&filtro));
+
+        // Fichas: (título, subtítulo, se comporta como, débil, fuerte, nota)
+        let mut genericas = Vec::new();
+        for c in &self.datos.guia.counters {
+            if ok(&[&c.unidad]) {
+                genericas.push((c.unidad.clone(), String::new(), None, c.la_vencen.join(", "), c.buena_contra.join(", "), None));
+            }
+        }
+        let mut unicas = Vec::new();
+        for civ in &self.datos.civs {
+            for u in &civ.unidades_detalle {
+                if ok(&[&u.nombre, &civ.nombre, &u.como, &u.clase]) {
+                    let sub = format!("Unidad única de {} · {}", civ.nombre, u.clase);
+                    let nota = (!u.ajustado).then_some("Counter general según su tipo");
+                    unicas.push((u.nombre.clone(), sub, Some(u.como.clone()), u.debil.join(", "), u.fuerte.join(", "), nota));
+                }
+            }
+        }
+
         egui::ScrollArea::vertical().auto_shrink(false).show(ui, |ui| {
-            for c in &self.datos.guia.counters {
-                tema::marco(tema::BORDE).show(ui, |ui| {
-                    ui.set_width(ui.available_width());
-                    ui.label(RichText::new(&c.unidad).strong().size(16.0));
-                    ui.horizontal_wrapped(|ui| {
-                        ui.label(RichText::new("La vencen:").color(tema::ROJO).strong());
-                        ui.label(c.la_vencen.join(", "));
-                    });
-                    ui.horizontal_wrapped(|ui| {
-                        ui.label(RichText::new("Buena contra:").color(tema::VERDE).strong());
-                        ui.label(c.buena_contra.join(", "));
-                    });
-                });
+            for (titulo, fichas) in [("Unidades generales", &genericas), ("Unidades únicas de cada civilización", &unicas)] {
+                if fichas.is_empty() {
+                    continue;
+                }
+                ui.label(RichText::new(format!("{titulo} ({})", fichas.len())).strong().size(18.0).color(tema::DORADO));
                 ui.add_space(4.0);
+                for par in fichas.chunks(2) {
+                    ui.columns(2, |cols| {
+                        for (col, f) in cols.iter_mut().zip(par) {
+                            ficha_counter(col, f);
+                        }
+                    });
+                    ui.add_space(6.0);
+                }
+                ui.add_space(8.0);
+            }
+            if genericas.is_empty() && unicas.is_empty() {
+                ui.label(RichText::new("No encontré unidades con esa búsqueda.").color(tema::TEXTO_SUAVE));
             }
         });
     }
@@ -650,6 +695,36 @@ fn color_dificultad(d: &str) -> egui::Color32 {
         "Difícil" => tema::ROJO,
         _ => tema::ORO,
     }
+}
+
+type Ficha = (String, String, Option<String>, String, String, Option<&'static str>);
+
+fn ficha_counter(ui: &mut egui::Ui, f: &Ficha) {
+    let (titulo, sub, como, debil, fuerte, nota) = f;
+    tema::marco(tema::BORDE).show(ui, |ui| {
+        ui.set_width(ui.available_width());
+        ui.label(RichText::new(titulo).strong().size(17.0));
+        if !sub.is_empty() {
+            ui.label(RichText::new(sub).small().color(tema::TEXTO_SUAVE));
+        }
+        if let Some(c) = como {
+            ui.horizontal_wrapped(|ui| {
+                ui.label(RichText::new("Se comporta como:").small().color(tema::TEXTO_SUAVE));
+                tema::pastilla(ui, c, tema::color_fase("Castillos"));
+            });
+        }
+        ui.horizontal_wrapped(|ui| {
+            ui.label(RichText::new("Débil contra:").color(tema::ROJO).strong());
+            ui.label(debil);
+        });
+        ui.horizontal_wrapped(|ui| {
+            ui.label(RichText::new("Fuerte contra:").color(tema::VERDE).strong());
+            ui.label(fuerte);
+        });
+        if let Some(n) = nota {
+            ui.label(RichText::new(*n).small().italics().color(tema::TEXTO_SUAVE));
+        }
+    });
 }
 
 fn tarjeta_texto(ui: &mut egui::Ui, titulo: &str, color: egui::Color32, texto: &str) {
