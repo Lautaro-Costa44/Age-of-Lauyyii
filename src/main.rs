@@ -216,7 +216,7 @@ impl App {
                             (Tab::Civs, "Civilizaciones"),
                             (Tab::Tiempos, "Timings"),
                             (Tab::Counters, "Counters"),
-                            (Tab::Consejos, "Consejos"),
+                            (Tab::Consejos, "Guías y consejos"),
                         ] {
                             let activo = self.tab == t;
                             let txt = RichText::new(nombre).color(if activo { tema::DORADO } else { tema::TEXTO_SUAVE });
@@ -376,12 +376,15 @@ impl App {
         ui.horizontal_wrapped(|ui| {
             for (i, l) in civ.lineas.iter().enumerate() {
                 let activa = i == self.cfg.linea;
-                let txt = RichText::new(&l.nombre).color(if activa { tema::FONDO } else { tema::TEXTO });
+                let nombre = if l.recomendada { format!("★ {}", l.nombre) } else { l.nombre.clone() };
+                let txt = RichText::new(nombre).color(if activa { tema::FONDO } else { tema::TEXTO });
                 let mut b = egui::Button::new(txt).corner_radius(egui::CornerRadius::same(14));
                 if activa {
                     b = b.fill(tema::DORADO);
                 }
-                if ui.add(b).on_hover_text(format!("{} — {}", l.tipo, l.descripcion)).clicked() {
+                let extra = if l.recomendada { "
+★ Especialmente cómoda con esta civilización" } else { "" };
+                if ui.add(b).on_hover_text(format!("{} — {}{extra}", l.tipo, l.descripcion)).clicked() {
                     nueva = Some(i);
                 }
             }
@@ -437,6 +440,9 @@ impl App {
             self.selector_linea(ui);
             if let Some(l) = civ.lineas.get(self.cfg.linea) {
                 ui.label(RichText::new(&l.descripcion).color(tema::TEXTO_SUAVE));
+                if let Some(url) = &l.fuente {
+                    ui.hyperlink_to(RichText::new("Fuente: ver el video de la guía").small(), url);
+                }
             }
             ui.add_space(6.0);
             self.controles_crono(ui);
@@ -628,13 +634,52 @@ impl App {
         });
     }
 
-    fn vista_consejos(&self, ui: &mut egui::Ui) {
+    fn vista_consejos(&mut self, ui: &mut egui::Ui) {
+        let civ = self.datos.civs.get(self.civ_sel).cloned();
+        let mut ir_a = None;
         egui::ScrollArea::vertical().auto_shrink(false).show(ui, |ui| {
+            // Guías de estrategias completas (con línea de tiempo en cada civ)
+            for g in &self.datos.guia.guias {
+                tema::marco(tema::DORADO).show(ui, |ui| {
+                    ui.set_width(ui.available_width());
+                    ui.horizontal_wrapped(|ui| {
+                        ui.label(RichText::new(format!("Guía: {}", g.titulo)).strong().size(20.0).color(tema::DORADO));
+                        ui.hyperlink_to(RichText::new(format!("video de {}", g.autor)).small(), &g.url);
+                    });
+                    ui.add(egui::Label::new(&g.resumen).wrap());
+                    if let Some(c) = &civ {
+                        if let Some(i) = c.lineas.iter().position(|l| l.id == g.id) {
+                            if ui
+                                .button(RichText::new(format!("Ver la línea de tiempo con {}  ▶", c.nombre)).strong())
+                                .clicked()
+                            {
+                                ir_a = Some(i);
+                            }
+                        }
+                    }
+                    ui.add_space(6.0);
+                    for sec in &g.secciones {
+                        tarjeta_lista(ui, &sec.titulo, tema::color_fase("Castillos"), &sec.items);
+                        ui.add_space(4.0);
+                    }
+                    ui.label(
+                        RichText::new("Resumen con palabras propias de la guía en video; los créditos son de su autor.")
+                            .small()
+                            .color(tema::TEXTO_SUAVE),
+                    );
+                });
+                ui.add_space(10.0);
+            }
             for cat in &self.datos.guia.consejos {
                 tarjeta_lista(ui, &cat.titulo, tema::DORADO, &cat.items);
                 ui.add_space(6.0);
             }
         });
+        if let Some(i) = ir_a {
+            self.cfg.linea = i;
+            self.paso = 0;
+            self.tab = Tab::Partida;
+        }
     }
 }
 

@@ -40,6 +40,12 @@ pub struct Linea {
     pub tipo: String,
     pub descripcion: String,
     pub pasos: Vec<Paso>,
+    /// Link a la fuente de la guía (ej. un video), si la hay
+    #[serde(default)]
+    pub fuente: Option<String>,
+    /// Estrategia especialmente cómoda para esta civ
+    #[serde(default)]
+    pub recomendada: bool,
 }
 
 #[derive(Deserialize, Clone)]
@@ -125,6 +131,20 @@ pub struct Guia {
     pub tiempos: Vec<Dato>,
     pub counters: Vec<Counter>,
     pub consejos: Vec<Categoria>,
+    #[serde(default)]
+    pub guias: Vec<GuiaEstrategia>,
+}
+
+/// Guía de una estrategia completa (ej. Fast Castle + Boom), con su línea de tiempo por civ.
+#[derive(Deserialize, Clone)]
+pub struct GuiaEstrategia {
+    /// Coincide con el id de la línea de tiempo de cada civ
+    pub id: String,
+    pub titulo: String,
+    pub autor: String,
+    pub url: String,
+    pub resumen: String,
+    pub secciones: Vec<Categoria>,
 }
 
 pub struct Datos {

@@ -1,31 +1,209 @@
 {
   "tiempos": [
-    { "titulo": "Aldeano", "valor": "50 comida · 25 s", "nota": "Un CU produce ~2,4 aldeanos por minuto. Nunca lo dejes quieto." },
-    { "titulo": "Telar (Loom)", "valor": "50 oro · 25 s", "nota": "Hacelo antes de atraer jabalíes o cuando te ataquen con scouts." },
-    { "titulo": "Edad Feudal", "valor": "500 comida · 130 s", "nota": "Requiere 2 edificios de la Edad Oscura (casas no cuentan; molino/campamentos/cuartel sí)." },
-    { "titulo": "Edad de los Castillos", "valor": "800 comida + 200 oro · 160 s", "nota": "Requiere 2 edificios feudales (herrería, mercado, galería, establo...)." },
-    { "titulo": "Edad Imperial", "valor": "1000 comida + 800 oro · 190 s", "nota": "Requiere 2 edificios de Castillos o un castillo." },
-    { "titulo": "Casa", "valor": "25 madera · +5 pop", "nota": "Construí una cada ~5 aldeanos; en Castillos de a 2-3." },
-    { "titulo": "Granja", "valor": "60 madera", "nota": "Usá la cola de resembrado en el molino para no tener aldeanos ociosos." },
-    { "titulo": "Centro Urbano", "valor": "275 madera + 100 piedra", "nota": "Boom típico: 2-3 CU extra al llegar a Castillos." },
-    { "titulo": "Clic a Feudal (objetivo)", "valor": "8:30 - 9:30", "nota": "Llegada a Feudal ~10:00. Si llegás después de 11:00, revisá CU ocioso y bloqueos de casas." },
-    { "titulo": "Llegada a Castillos (objetivo)", "valor": "16:00 - 18:00", "nota": "Fast Castle: ~16:00. Después de Feudal agresiva: ~19:00-21:00." },
-    { "titulo": "Aldeanos a los 15 min", "valor": "~35-40", "nota": "Con un solo CU sin parar." },
-    { "titulo": "Aldeanos a los 25 min", "valor": "~80-100", "nota": "Con boom de 3 CU. Meta habitual: 110-130 aldeanos en Imperial." },
-    { "titulo": "Reparto Imperial (orientativo)", "valor": "~45 comida / 35 madera / 30 oro / 10 piedra", "nota": "Depende mucho de qué unidades hagas." }
+    {
+      "titulo": "Aldeano",
+      "valor": "50 comida · 25 s",
+      "nota": "Un CU produce ~2,4 aldeanos por minuto. Nunca lo dejes quieto."
+    },
+    {
+      "titulo": "Telar (Loom)",
+      "valor": "50 oro · 25 s",
+      "nota": "Hacelo antes de atraer jabalíes o cuando te ataquen con scouts."
+    },
+    {
+      "titulo": "Edad Feudal",
+      "valor": "500 comida · 130 s",
+      "nota": "Requiere 2 edificios de la Edad Oscura (casas no cuentan; molino/campamentos/cuartel sí)."
+    },
+    {
+      "titulo": "Edad de los Castillos",
+      "valor": "800 comida + 200 oro · 160 s",
+      "nota": "Requiere 2 edificios feudales (herrería, mercado, galería, establo...)."
+    },
+    {
+      "titulo": "Edad Imperial",
+      "valor": "1000 comida + 800 oro · 190 s",
+      "nota": "Requiere 2 edificios de Castillos o un castillo."
+    },
+    {
+      "titulo": "Casa",
+      "valor": "25 madera · +5 pop",
+      "nota": "Construí una cada ~5 aldeanos; en Castillos de a 2-3."
+    },
+    {
+      "titulo": "Granja",
+      "valor": "60 madera",
+      "nota": "Usá la cola de resembrado en el molino para no tener aldeanos ociosos."
+    },
+    {
+      "titulo": "Centro Urbano",
+      "valor": "275 madera + 100 piedra",
+      "nota": "Boom típico: 2-3 CU extra al llegar a Castillos."
+    },
+    {
+      "titulo": "Clic a Feudal (objetivo)",
+      "valor": "8:30 - 9:30",
+      "nota": "Llegada a Feudal ~10:00. Si llegás después de 11:00, revisá CU ocioso y bloqueos de casas."
+    },
+    {
+      "titulo": "Llegada a Castillos (objetivo)",
+      "valor": "16:00 - 18:00",
+      "nota": "Fast Castle: ~16:00. Después de Feudal agresiva: ~19:00-21:00."
+    },
+    {
+      "titulo": "Aldeanos a los 15 min",
+      "valor": "~35-40",
+      "nota": "Con un solo CU sin parar."
+    },
+    {
+      "titulo": "Aldeanos a los 25 min",
+      "valor": "~80-100",
+      "nota": "Con boom de 3 CU. Meta habitual: 110-130 aldeanos en Imperial."
+    },
+    {
+      "titulo": "Reparto Imperial (orientativo)",
+      "valor": "~45 comida / 35 madera / 30 oro / 10 piedra",
+      "nota": "Depende mucho de qué unidades hagas."
+    }
   ],
   "counters": [
-    { "unidad": "Arqueros", "la_vencen": ["Hostigadores", "Caballeros", "Mangoneles", "Huscarles"], "buena_contra": ["Infantería", "Lanceros"] },
-    { "unidad": "Caballeros / caballería pesada", "la_vencen": ["Lanceros / Piqueros", "Camellos", "Monjes (con micro)"], "buena_contra": ["Arqueros", "Asedio", "Hostigadores"] },
-    { "unidad": "Exploradores / caballería ligera", "la_vencen": ["Lanceros", "Camellos"], "buena_contra": ["Monjes", "Hostigadores", "Aldeanos", "Asedio"] },
-    { "unidad": "Lanceros / Piqueros", "la_vencen": ["Arqueros", "Espadachines", "Escorpiones"], "buena_contra": ["Caballería", "Elefantes", "Camellos"] },
-    { "unidad": "Hombres de armas / Espadachines", "la_vencen": ["Arqueros", "Mangoneles", "Cañoneros de mano"], "buena_contra": ["Lanceros", "Hostigadores", "Edificios"] },
-    { "unidad": "Hostigadores", "la_vencen": ["Infantería", "Caballería", "Mangoneles"], "buena_contra": ["Arqueros", "Arqueros a caballo", "Lanceros"] },
-    { "unidad": "Arqueros a caballo", "la_vencen": ["Hostigadores", "Escorpiones", "Caballeros"], "buena_contra": ["Infantería", "Lanceros", "Caballería lenta"] },
-    { "unidad": "Monjes", "la_vencen": ["Exploradores / caballería ligera", "Guerreros águila", "Arqueros"], "buena_contra": ["Unidades caras (caballeros, elefantes)"] },
-    { "unidad": "Mangoneles / Onagros", "la_vencen": ["Caballería", "Otros mangoneles", "Arietes"], "buena_contra": ["Arqueros agrupados", "Infantería agrupada"] },
-    { "unidad": "Arietes", "la_vencen": ["Infantería", "Caballería cuerpo a cuerpo"], "buena_contra": ["Edificios", "Castillos"] },
-    { "unidad": "Elefantes", "la_vencen": ["Monjes", "Alabarderos", "Camellos en masa"], "buena_contra": ["Casi todo cuerpo a cuerpo", "Edificios"] }
+    {
+      "unidad": "Arqueros",
+      "la_vencen": [
+        "Hostigadores",
+        "Caballeros",
+        "Mangoneles",
+        "Huscarles"
+      ],
+      "buena_contra": [
+        "Infantería",
+        "Lanceros"
+      ]
+    },
+    {
+      "unidad": "Caballeros / caballería pesada",
+      "la_vencen": [
+        "Lanceros / Piqueros",
+        "Camellos",
+        "Monjes (con micro)"
+      ],
+      "buena_contra": [
+        "Arqueros",
+        "Asedio",
+        "Hostigadores"
+      ]
+    },
+    {
+      "unidad": "Exploradores / caballería ligera",
+      "la_vencen": [
+        "Lanceros",
+        "Camellos"
+      ],
+      "buena_contra": [
+        "Monjes",
+        "Hostigadores",
+        "Aldeanos",
+        "Asedio"
+      ]
+    },
+    {
+      "unidad": "Lanceros / Piqueros",
+      "la_vencen": [
+        "Arqueros",
+        "Espadachines",
+        "Escorpiones"
+      ],
+      "buena_contra": [
+        "Caballería",
+        "Elefantes",
+        "Camellos"
+      ]
+    },
+    {
+      "unidad": "Hombres de armas / Espadachines",
+      "la_vencen": [
+        "Arqueros",
+        "Mangoneles",
+        "Cañoneros de mano"
+      ],
+      "buena_contra": [
+        "Lanceros",
+        "Hostigadores",
+        "Edificios"
+      ]
+    },
+    {
+      "unidad": "Hostigadores",
+      "la_vencen": [
+        "Infantería",
+        "Caballería",
+        "Mangoneles"
+      ],
+      "buena_contra": [
+        "Arqueros",
+        "Arqueros a caballo",
+        "Lanceros"
+      ]
+    },
+    {
+      "unidad": "Arqueros a caballo",
+      "la_vencen": [
+        "Hostigadores",
+        "Escorpiones",
+        "Caballeros"
+      ],
+      "buena_contra": [
+        "Infantería",
+        "Lanceros",
+        "Caballería lenta"
+      ]
+    },
+    {
+      "unidad": "Monjes",
+      "la_vencen": [
+        "Exploradores / caballería ligera",
+        "Guerreros águila",
+        "Arqueros"
+      ],
+      "buena_contra": [
+        "Unidades caras (caballeros, elefantes)"
+      ]
+    },
+    {
+      "unidad": "Mangoneles / Onagros",
+      "la_vencen": [
+        "Caballería",
+        "Otros mangoneles",
+        "Arietes"
+      ],
+      "buena_contra": [
+        "Arqueros agrupados",
+        "Infantería agrupada"
+      ]
+    },
+    {
+      "unidad": "Arietes",
+      "la_vencen": [
+        "Infantería",
+        "Caballería cuerpo a cuerpo"
+      ],
+      "buena_contra": [
+        "Edificios",
+        "Castillos"
+      ]
+    },
+    {
+      "unidad": "Elefantes",
+      "la_vencen": [
+        "Monjes",
+        "Alabarderos",
+        "Camellos en masa"
+      ],
+      "buena_contra": [
+        "Casi todo cuerpo a cuerpo",
+        "Edificios"
+      ]
+    }
   ],
   "consejos": [
     {
@@ -76,6 +254,68 @@
         "Mirá tus replays: buscá el tiempo de CU ocioso y bloqueos de casas.",
         "Mejor una economía constante que una micro perfecta.",
         "No hay que ganar todas las peleas: con más aldeanos, el tiempo juega a tu favor."
+      ]
+    }
+  ],
+  "guias": [
+    {
+      "id": "fc_boom",
+      "titulo": "Fast Castle + Boom",
+      "autor": "NelsonSKA",
+      "url": "https://www.youtube.com/watch?v=7LYPt1NFpbw",
+      "resumen": "Llegar lo antes posible a la Edad de los Castillos para poder construir más Centros urbanos y, con 3 CU produciendo sin parar, tener una economía enorme. Sirve con cualquier civilización: la línea de tiempo \"Fast Castle + Boom\" de cada civ sigue estos pasos.",
+      "secciones": [
+        {
+          "titulo": "Cuándo usarla",
+          "items": [
+            "Cuando sabés que no te van a atacar en los primeros minutos: es más lenta que un rush y te deja sin defensa al principio.",
+            "Mapas cerrados (Arena, Selva Negra, Túnel Amazónico): son fáciles de defender y los rush casi no existen.",
+            "En partidas por equipos si jugás de pocket (en el medio, lejos del enemigo): golpeás tarde pero muy fuerte.",
+            "Ventaja: con tanta economía te adaptás mejor y podés pagar unidades caras."
+          ]
+        },
+        {
+          "titulo": "Las claves",
+          "items": [
+            "Regla de oro: el Centro urbano nunca deja de producir aldeanos.",
+            "Al clic de Feudal (27 de población: 26 aldeanos + explorador) el reparto es 2 granjeros, 7 cazadores, 5 en bayas, 9 leñadores y 3 en oro.",
+            "Mientras subís a Feudal dejá encolados SOLO 2 aldeanos, con el punto de reunión en la madera.",
+            "Nada de tecnologías económicas ni militares hasta asegurar Castillos: no llegan a amortizarse.",
+            "Guardá 325 de madera para Feudal: Herrería (150) + Mercado (175). Separá 3 leñadores unos segundos antes de llegar.",
+            "Clic en Castillos apenas puedas y juntá 550 de madera para los 2 CU nuevos (275 cada uno).",
+            "Si sobra madera y comida mientras subís: Hacha de doble filo y Collera.",
+            "Cuando se acaban las ovejas → granjas. Cuando se acaban las bayas → esos aldeanos a madera.",
+            "Hacé casas con tiempo: con 3 CU triplicás la producción y bloquearte de población es tirar el boom."
+          ]
+        },
+        {
+          "titulo": "El boom en Castillos",
+          "items": [
+            "4 leñadores de cada campamento construyen un CU cada grupo (elegí lugares que también defiendan tu base).",
+            "Punto de reunión de los 3 CU en la madera; cada vez que juntás madera para una granja, pasá un leñador a esa granja nueva.",
+            "Necesitás al menos 18 granjeros para mantener 3 CU produciendo, y más comida para todo lo demás.",
+            "Cuando alcancen los recursos: Carretilla, y las mejoras de madera y granjas.",
+            "El boom está listo cuando los 3 CU producen sin parar."
+          ]
+        },
+        {
+          "titulo": "¿Y después?",
+          "items": [
+            "Partida tranquila: seguí hasta ~100 aldeanos; con piedra (juntada o comprada en el mercado) hacé un 4to CU.",
+            "Si te presionan o un aliado necesita ayuda: seguí con aldeanos y gastá lo que sobre en ejército (ballesteros, caballería, camellos…).",
+            "Juntá piedra para un castillo (defensivo u ofensivo) que además te da tu unidad y tecnología únicas.",
+            "Practicala contra la IA, incluso bajando la velocidad, hasta que te salga de memoria."
+          ]
+        },
+        {
+          "titulo": "Civs más cómodas (según el video)",
+          "items": [
+            "Británicos: Centros urbanos más baratos.",
+            "Vikingos: Carretilla y Carro de mano gratis.",
+            "Persas: Centros urbanos que trabajan más rápido.",
+            "Teutones: granjas más baratas."
+          ]
+        }
       ]
     }
   ]

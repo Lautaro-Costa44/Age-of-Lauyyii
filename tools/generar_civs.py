@@ -281,7 +281,36 @@ NOMBRES_APERTURA = {
     "arqueros": ("Arqueros", "Feudal agresivo", "Masa de arqueros en Feudal; necesita oro temprano."),
     "maa": ("Hombres de armas → Arqueros", "Feudal agresivo", "3 milicias que suben a hombres de armas al llegar a Feudal; después arqueros."),
     "fc": ("Castillos rápido (Fast Castle)", "Económico / Boom", "Saltás casi toda la Feudal para llegar rápido a Castillos y hacer boom."),
+    "fc_boom": ("Fast Castle + Boom (guía NelsonSKA)", "Económico / Boom",
+                "Llegar rápido a Castillos y armar 3 Centros urbanos produciendo aldeanos sin parar. "
+                "Ideal en mapas cerrados (Arena, Selva Negra, Túnel Amazónico) o de pocket en equipos."),
 }
+
+
+# Notas propias de cada civ para el boom en Castillos (se suman a la línea "fc_boom").
+NOTAS_BOOM = {
+    "Britons": "Tus CU cuestan 50 % menos de madera desde Castillos: los 2 CU salen con ~275 de madera.",
+    "Vikings": "Carretilla y Carro de mano son gratis: esa comida y madera va directo a más aldeanos.",
+    "Persians": "Tus CU trabajan más rápido en cada edad: sacás más aldeanos por minuto.",
+    "Teutons": "Tus granjas cuestan 40 % menos: pasá leñadores a granjas más seguido.",
+    "Cumans": "Podés construir un 2do CU ya en Feudal: adelantá el boom.",
+    "Bulgarians": "Tus CU cuestan 50 % menos de piedra.",
+    "Sicilians": "Tus CU se construyen 100 % más rápido.",
+    "Hindustanis": "Tus aldeanos cuestan menos comida: el boom rinde más.",
+    "Chinese": "Tus CU dan +15 de población: necesitás menos casas.",
+    "Incas": "Tus casas dan 10 de población: necesitás menos casas.",
+    "Huns": "No necesitás casas: nunca te bloqueás de población.",
+    "Lithuanians": "Cada CU nuevo te da +100 de comida.",
+    "Tatars": "Cada CU nuevo trae 2 ovejas: ponelas debajo del CU.",
+    "Wei": "Cada mejora económica regala un aldeano: Carretilla, Collera y Hacha de doble filo apenas puedas.",
+    "Vietnamese": "Tus mejoras económicas no cuestan madera y se investigan el doble de rápido.",
+    "Burgundians": "Tus mejoras económicas salen una edad antes y más baratas: Arado pesado y Carretilla ya en Feudal.",
+    "Malians": "Tus edificios (CU incluidos) cuestan 15 % menos de madera.",
+    "Saxons": "Cada molino o campamento nuevo te da +50 de comida y +10 de piedra.",
+    "Khmer": "Tus granjeros no necesitan molino: granjas donde quieras alrededor de los CU nuevos.",
+}
+# Civs que el video menciona como más cómodas para esta estrategia
+RECOMENDADAS_BOOM = {"Britons", "Vikings", "Persians", "Teutons"}
 
 
 def mmss(s):
@@ -294,7 +323,9 @@ class Linea:
 
     def __init__(self, civ, plan):
         self.mods = plan.get("mods", {})
-        self.notas = plan.get("notas", {})
+        self.notas = dict(plan.get("notas", {}))
+        if civ in NOTAS_BOOM:
+            self.notas["boom"] = NOTAS_BOOM[civ]
         self.ini = self.mods.get("iniciales", 3)
         self.vel = self.mods.get("velocidad_cu", 1.0)
         self.t = self.mods.get("retraso", 0)
@@ -313,6 +344,11 @@ class Linea:
         c, m, o, p = dist
         self.pasos.append(dict(aldeanos=self.v, texto=texto, comida=c, madera=m, oro=o,
                                piedra=p, tiempo="~" + mmss(self.t), fase=self.fase, hito=hito))
+
+    def durante(self, texto, dist):
+        c, m, o, p = dist
+        self.pasos.append(dict(aldeanos=self.v, texto=texto, comida=c, madera=m, oro=o, piedra=p,
+                               tiempo="durante el avance", fase=self.pasos[-1]["fase"], hito=False))
 
     def telar(self):
         self.t += self.mods.get("telar", 25)
@@ -376,6 +412,9 @@ def fin(l, plan, dist_cas, v_cas):
 
 
 def apertura(nombre, l, plan):
+    if nombre == "fc_boom":
+        apertura_fc_boom(l, plan)
+        return l.pasos
     edad_oscura(l)
     if nombre == "scouts":
         l.paso(21, "Aldeanos 18-21 a madera (2do campamento si el bosque queda lejos).", (13, 8, 0, 0))
@@ -405,6 +444,59 @@ def apertura(nombre, l, plan):
         l.paso(l.v, "LLEGADA A FEUDAL: 2do edificio feudal (mercado/herrería). Hacha de doble filo." + l.nota("feudal"), (14, 7, 5, 0), hito=True)
         fin(l, plan, (14, 8, 6, 0), l.v + 2)
     return l.pasos
+
+
+def apertura_fc_boom(l, plan):
+    """Fast Castle + Boom, según la guía paso a paso de NelsonSKA (resumida con palabras propias)."""
+    factor = l.mods.get("factor_edad", 1.0)
+    if l.ini == 6:
+        ini = "Los 6 aldeanos iniciales: 2 construyen casas, 4 a ovejas."
+    elif l.ini == 4:
+        ini = "Los 4 aldeanos iniciales: 2 construyen casas, 2 a ovejas. Aldeanos nuevos a ovejas."
+    else:
+        ini = casas(l, "2 casas con los aldeanos iniciales; ") + "aldeanos 1-6 a ovejas bajo el CU."
+    l.paso(6, ini + " El CU produce aldeanos sin parar durante toda la partida (regla de oro)." + l.nota("inicio"), (6, 0, 0, 0))
+    l.paso(10, "El aldeano 7 construye un campamento maderero; 7-10 a madera (4 leñadores)." + l.nota("madera"), (6, 4, 0, 0))
+    l.paso(11, "El aldeano 11 atrae el 1er jabalí al CU." + l.nota("caza"), (7, 4, 0, 0))
+    casa = "El 13" if l.mods.get("sin_casas") else "El 12 hace una casa cerca de las bayas y el 13"
+    l.paso(16, f"Aldeanos 12-16 a bayas (5 en total). {casa} construye el molino. "
+           "Antes de que se acabe el 1er jabalí, un aldeano de comida atrae el 2do." + l.nota("comida"), (12, 4, 0, 0))
+    l.paso(18, "Aldeanos 17-18 al jabalí. Quedan 9 cazadores, 5 en bayas y 4 leñadores.", (14, 4, 0, 0))
+    l.paso(18, "Antes de que se termine el jabalí, 2 cazadores construyen 2 granjas junto al CU "
+           "para aprovechar mejor las ovejas que quedan." + l.nota("granjas"), (14, 4, 0, 0))
+    casa2 = "El 20" if l.mods.get("sin_casas") else "El 19 hace una casa junto a otro bosque y el 20"
+    l.paso(23, f"{casa2} construye un 2do campamento maderero. Aldeanos 19-23 a madera: "
+           "9 leñadores (4 + 5).", (14, 9, 0, 0))
+    l.paso(26, "El 24 construye un campamento minero; 24-26 a oro." + l.nota("oro"), (14, 9, 3, 0))
+    l.telar()
+    l.avanzar("Feudal", "POP 27 (26 aldeanos + explorador): Telar y clic en Feudal (en Arena el Telar puede esperar). "
+              "Encolá SOLO 2 aldeanos y poné el punto de reunión en la madera.", (14, 9, 3, 0))
+    l.durante("No investigues nada (ni economía ni militar) hasta asegurar Castillos. Revisá aldeanos ociosos y, "
+              "cuando se acaben las ovejas, hacé granjas. Guardá 325 de madera. Unos segundos antes de llegar, "
+              "separá 3 leñadores.", (14, 9, 3, 0))
+    req = ("no necesitás Mercado ni Herrería para avanzar: clic en Castillos apenas tengas 800 comida y 200 oro"
+           if l.mods.get("sin_requisitos") else
+           "2 de los leñadores separados construyen un Mercado y el 3ro una Herrería")
+    l.paso(l.v, f"LLEGADA A FEUDAL: {req}. Los 2 aldeanos encolados van a madera." + l.nota("feudal"),
+           (14, 11, 3, 0), hito=True)
+    l.t += 2 * ALDEANO / l.vel
+    l.v += 2
+    l.pasos.append(dict(aldeanos=l.v, texto="Clic en Castillos apenas puedas. Mientras subís: elegí dónde van los 2 CU nuevos "
+                        "(también te defienden), juntá 550 de madera y, si sobra, Hacha de doble filo y Collera. "
+                        "Cuando se acaben las bayas, esos aldeanos a madera. ¡No te olvides de las casas!",
+                        comida=14, madera=11, oro=3, piedra=0, tiempo="clic ~" + mmss(l.t), fase="Feudal", hito=True))
+    l.t += CASTILLOS * factor
+    l.v += l.mods.get("aldeanos_por_edad", 0)
+    l.pasos.append(dict(aldeanos=l.v, texto="LLEGADA A CASTILLOS: 4 leñadores de cada campamento construyen un CU cada grupo. "
+                        "Los 3 CU producen aldeanos sin parar con el punto de reunión en la madera; cada vez que alcance "
+                        "la madera, pasá un leñador a una granja nueva. Necesitás 18+ granjeros." + l.nota("boom"),
+                        comida=14, madera=11, oro=3, piedra=0, tiempo="~" + mmss(l.t), fase="Castillos", hito=True))
+    l.pasos.append(dict(aldeanos=0, texto="BOOM LISTO cuando los 3 CU producen sin parar. Según la partida: seguí hasta ~100 "
+                        "aldeanos (un 4to CU con piedra juntada o comprada en el mercado), usá lo que sobre para ejército, "
+                        "o juntá piedra para un castillo con tu unidad única. " + plan["cas"],
+                        comida=0, madera=0, oro=0, piedra=0, tiempo=None, fase="Castillos", hito=True))
+    l.pasos.append(dict(aldeanos=0, texto="IMPERIAL (con ~100 aldeanos). " + plan["imp"],
+                        comida=0, madera=0, oro=0, piedra=0, tiempo=None, fase="Imperial", hito=True))
 
 
 # ---------------------------------------------------------------------------
@@ -533,6 +625,18 @@ MEJORAS = {
     "fc": OSCURA + [
         [], [GRANJAS], [CAMP_MIN], [EDAD_F, EDIF_FEUDAL], [EDIF_FEUDAL, HACHA],
         [EDAD_C, COLLERA], [CU_EXTRA, CABALLERO, UU, UT1, ARADO, CARRETILLA], [PALADIN, ARBALESTERO, UT2]],
+    "fc_boom": [
+        [ALDEANOS, B("2 casas", "al empezar")], [CAMP_MAD], [B("Atraer jabalí", "al Centro urbano")],
+        [MOLINO, B("Casa", "cerca de las bayas")], [B("Atraer 2do jabalí", "antes de que se acabe el 1ro")],
+        [B("2 granjas", "junto al Centro urbano")],
+        [B("Casa", "junto al otro bosque"), B("2do campamento maderero", "en ese bosque")], [CAMP_MIN],
+        [TELAR, EDAD_F, B("Encolar solo 2 aldeanos", "punto de reunión en madera")],
+        [B("Granjas", "cuando se acaben las ovejas"), B("Guardar 325 de madera", "Herrería 150 + Mercado 175")],
+        [B("Mercado", "2 leñadores"), B("Herrería", "1 leñador")],
+        [EDAD_C, B("Juntar 550 de madera", "2 CU de 275"), HACHA, COLLERA],
+        [B("2 Centros urbanos", "4 leñadores cada uno"), B("Granjas", "1 leñador por granja nueva"), CARRETILLA, ARADO, SIERRA],
+        [B("~100 aldeanos", "4to CU si sobra piedra"), UU, UT1, BALLESTERO, CABALLERO],
+        [PALADIN, ARBALESTERO, UT2]],
 }
 
 
@@ -540,7 +644,13 @@ def sin_parentesis(s):
     return re.sub(r"\s*\(.*$", "", s).strip()
 
 
-def resolver_mejoras(apertura_id, pasos, civ_data, ids, uu, tt):
+def resolver_mejoras(apertura_id, pasos, civ_data, ids, uu, tt, mods=None):
+    mods = mods or {}
+    omitir = set()
+    if mods.get("sin_casas"):
+        omitir |= {"2 casas", "Casa"}
+    if mods.get("sin_requisitos"):
+        omitir |= {"Mercado", "Herrería", "Herrería o Mercado"}
     filas = MEJORAS[apertura_id]
     assert len(filas) == len(pasos), (apertura_id, len(filas), len(pasos))
 
@@ -565,6 +675,8 @@ def resolver_mejoras(apertura_id, pasos, civ_data, ids, uu, tt):
                 continue
             opciones = casillero if isinstance(casillero, list) else [casillero]
             for op in opciones:
+                if op[1] in omitir:
+                    break
                 if disponible(op):
                     mej.append(dict(que=op[1], donde=op[2]))
                     break
@@ -694,11 +806,15 @@ def main(data_path, strings_path, salida):
         nombre = strings[str(c["name_string_id"])]
         enfoque, bonos, uu, tt, equipo = parsear(strings[str(c["help_string_id"])])
         lineas = []
-        for ap in (plan["ap"], plan["alt"]):
+        for ap in (plan["ap"], plan["alt"], "fc_boom"):
             n, tipo, desc = NOMBRES_APERTURA[ap]
             pasos = apertura(ap, Linea(clave, plan), plan)
-            resolver_mejoras(ap, pasos, c, ids, uu, tt)
-            lineas.append(dict(id=ap, nombre=n, tipo=tipo, descripcion=desc, pasos=pasos))
+            resolver_mejoras(ap, pasos, c, ids, uu, tt, plan.get("mods"))
+            linea = dict(id=ap, nombre=n, tipo=tipo, descripcion=desc, pasos=pasos)
+            if ap == "fc_boom":
+                linea["fuente"] = "https://www.youtube.com/watch?v=7LYPt1NFpbw"
+                linea["recomendada"] = clave in RECOMENDADAS_BOOM
+            lineas.append(linea)
         civs.append(dict(nombre=nombre, clave=clave, enfoque=enfoque, dificultad=plan["dif"],
                          unidades_unicas=uu, tecnologias_unicas=tt, bonos=bonos,
                          unidades_detalle=detalle_unidades(uu),
